@@ -1,0 +1,29 @@
+<div class="ion-padding" style="text-align: center;">
+    
+    <div style="margin-bottom: 20px;">
+        <h2>Skaner Etykiet</h2>
+        <p style="color: gray;">Analiza AI i ciekawostki</p>
+    </div>
+
+    <ion-button expand="block" color="dark" onclick="startScanner()" style="margin-bottom: 30px;">
+        <ion-icon name="barcode-outline" slot="start"></ion-icon>
+        Skanuj etykietę
+    </ion-button>
+
+    <div id="scanner-loading" style="display: none; margin: 40px 0;">
+        <ion-spinner name="crescent" color="primary" style="transform: scale(2);"></ion-spinner>
+        <p style="margin-top: 20px; color: gray;">Analizowanie etykiety...</p>
+    </div>
+
+    <ion-card id="scanner-result" style="display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <img id="scanned-image" src="" alt="Zeskanowana etykieta" style="height: 150px; object-fit: cover; width: 100%; filter: grayscale(50%);" />
+        <ion-card-header>
+            <ion-card-subtitle color="primary">Rozpoznano obiekt</ion-card-subtitle>
+            <ion-card-title>Ciekawostka na dziś</ion-card-title>
+        </ion-card-header>
+        <ion-card-content id="scanner-fact" style="font-size: 1.1rem; color: #333;">
+            Tresc ciekawostki
+        </ion-card-content>
+    </ion-card>
+
+</div>

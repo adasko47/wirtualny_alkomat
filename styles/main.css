@@ -1,0 +1,94 @@
+/* styles/main.css */
+
+body.dark {
+  --ion-background-color: #121212;
+  --ion-background-color-rgb: 18,18,18;
+  
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255,255,255;
+
+  --ion-color-step-50: #1e1e1e;
+  --ion-color-step-100: #2a2a2a;
+}
+
+body.dark ion-card {
+    --background: #1e1e1e;
+    color: white;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Style dla Historii i Szklanych Paneli --- */
+
+/* Animacja wejścia */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Wymuszamy przezroczyste tło dla elementów listy wewnątrz "szklanych" kart */
+.szklana-lista ion-item {
+    --background: transparent;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dostosowanie wykresu */
+#historyChart {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================== */
+/* POPRAWKA DLA WYSKAKUJĄCYCH OKIENEK (DARK MODE) */
+/* ========================================== */
+
+body.dark ion-alert,
+body.dark ion-popover,
+body.dark ion-action-sheet {
+    --background: #1e1e1e !important;
+    --ion-background-color: #1e1e1e !important;
+    --color: #ffffff !important;
+    --ion-text-color: #ffffff !important;
+}
+
+/* Wymuszenie białego tekstu na elementach listy wyboru */
+body.dark ion-alert .alert-radio-label,
+body.dark ion-alert .alert-title,
+body.dark ion-alert .alert-button-inner {
+    color: #ffffff !important;
+}
+
+body.dark ion-alert .alert-radio-icon {
+    border-color: #b966ff;
+}
+
+body.dark ion-alert [aria-checked="true"] .alert-radio-icon {
+    border-color: #b966ff;
+    background-color: #b966ff;
+}

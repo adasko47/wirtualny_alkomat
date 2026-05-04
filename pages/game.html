@@ -1,0 +1,25 @@
+<div class="ion-padding" style="text-align: center;">
+    
+    <h2>Test Refleksu</h2>
+    <p style="color: gray;">Sprawdź swoją koordynację</p>
+
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <h3 style="margin: 0;">Czas: <span id="game-time" style="color: #e53935;">10</span>s</h3>
+            </ion-col>
+            <ion-col>
+                <h3 style="margin: 0;">Punkty: <span id="game-score" style="color: #43a047;">0</span></h3>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-button id="start-btn" expand="block" style="margin-top: 10px;" onclick="startGame()">
+        Rozpocznij Test!
+    </ion-button>
+
+    <div id="game-board" style="position: relative; width: 100%; height: 350px; background: #e0e0e0; border-radius: 8px; margin-top: 20px; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);">
+        <p id="game-msg" style="position: absolute; top: 40%; left: 0; width: 100%; color: #888; font-size: 1.2rem;">Kliknij Start, aby zagrać</p>
+    </div>
+
+</div>

@@ -1,0 +1,53 @@
+<div class="ion-padding fade-in" style="max-width: 500px; margin: 0 auto;">
+
+    <div style="text-align: center; margin-bottom: 30px; margin-top: 10px;">
+        <ion-icon name="calculator" style="font-size: 50px; color: #b966ff; margin-bottom: 10px;"></ion-icon>
+        <h2 style="font-weight: 800; margin: 0; background: -webkit-linear-gradient(45deg, #3880ff, #b966ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Kalkulator Promili
+        </h2>
+        <p style="color: gray; font-size: 0.95rem; margin-top: 5px;">Wprowadź dane, aby oszacować wynik</p>
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 15px 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); margin-bottom: 25px;">
+
+        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
+            <ion-icon name="person-outline" slot="start" style="color: #3880ff;"></ion-icon>
+            <ion-select id="calc-gender" label="Płeć" label-placement="floating" style="width: 100%;">
+                <ion-select-option value="m">Mężczyzna</ion-select-option>
+                <ion-select-option value="k">Kobieta</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
+            <ion-icon name="scale-outline" slot="start" style="color: #b966ff;"></ion-icon>
+            <ion-input id="calc-weight" type="number" label="Waga (kg)" label-placement="floating" placeholder="np. 80"></ion-input>
+        </ion-item>
+
+        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
+            <ion-icon name="beer-outline" slot="start" style="color: #32d74b;"></ion-icon>
+            <ion-input id="calc-amount" type="number" label="Ilość (ml)" label-placement="floating" placeholder="np. 500"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" style="--background: transparent;">
+            <ion-icon name="water-outline" slot="start" style="color: #0bf4f3;"></ion-icon>
+            <ion-input id="calc-percent" type="number" label="Moc alkoholu (%)" label-placement="floating" placeholder="np. 5.0"></ion-input>
+        </ion-item>
+
+    </div>
+
+    <ion-button expand="block" shape="round" size="large" onclick="calculatePromile()" style="--box-shadow: 0 8px 20px rgba(185, 102, 255, 0.4); font-weight: bold; letter-spacing: 0.5px; --background: linear-gradient(45deg, #3880ff, #b966ff); margin-bottom: 30px;">
+        <ion-icon name="flash-outline" slot="start"></ion-icon>
+        Oblicz Wynik
+    </ion-button>
+
+    <ion-card id="result-card" style="display: none; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; padding: 10px;">
+        <ion-card-header>
+            <ion-card-subtitle style="letter-spacing: 1px; text-transform: uppercase;">Szacowany wynik</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <h1 id="result-value" style="font-size: 3.5rem; font-weight: 900; margin: 10px 0;">0.00 ‰</h1>
+            <div id="result-details" style="color: gray; font-size: 0.95rem; margin-top: 15px; line-height: 1.6;"></div>
+        </ion-card-content>
+    </ion-card>
+
+</div>

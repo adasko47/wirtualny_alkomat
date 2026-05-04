@@ -1,0 +1,53 @@
+<div class="ion-padding fade-in" style="max-width: 600px; margin: 0 auto;">
+
+    <div style="text-align: center; margin-bottom: 25px; margin-top: 10px;">
+        <ion-icon name="stats-chart-outline" style="font-size: 45px; color: #b966ff; margin-bottom: 10px;"></ion-icon>
+        <h2 style="font-weight: 800; margin: 0; background: -webkit-linear-gradient(45deg, #b966ff, #3880ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Twoja Historia
+        </h2>
+    </div>
+
+    <!-- Szybkie Statystyki -->
+    <ion-grid fixed style="padding: 0; margin-bottom: 20px;">
+        <ion-row>
+            <ion-col size="6">
+                <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; text-align: center;">
+                    <small style="color: gray; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px;">Wpisów</small>
+                    <h3 id="stats-count" style="margin: 5px 0; font-weight: bold; color: #b966ff;">0</h3>
+                </div>
+            </ion-col>
+            <ion-col size="6">
+                <div style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 15px; text-align: center;">
+                    <small style="color: gray; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px;">Ostatni wynik</small>
+                    <h3 id="stats-last" style="margin: 5px 0; font-weight: bold; color: #32d74b;">0.00‰</h3>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <!-- Miejsce na wykres (rysowany przez JS) -->
+    <div style="position: relative; height: 300px; width: 100%; margin-bottom: 20px;">
+        <canvas id="historyChart"></canvas>
+    </div>
+
+    <!-- Lista wpisów wstrzykiwana przez app.js -->
+    <ion-list id="history-list" class="szklana-lista" lines="none" style="background: transparent;"></ion-list>
+
+    <!-- Zarządzanie danymi -->
+    <div style="margin-top: 30px; display: flex; gap: 10px;">
+        <ion-button expand="block" fill="outline" onclick="exportHistoryToCSV()" style="flex: 1; --border-color: rgba(255,255,255,0.2); --color: #3880ff;">
+            <ion-icon name="download-outline" slot="start"></ion-icon> Eksportuj
+        </ion-button>
+        <ion-button expand="block" fill="outline" onclick="triggerCSVImport()" style="flex: 1; --border-color: rgba(255,255,255,0.2); --color: #b966ff;">
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon> Importuj
+        </ion-button>
+    </div>
+    
+    <ion-button expand="block" color="danger" fill="clear" onclick="clearHistory()" style="margin-top: 15px;">
+        <ion-icon name="trash-bin-outline" slot="start"></ion-icon> Wyczyść całą historię
+    </ion-button>
+
+    <!-- Ukryty input do importu plików -->
+    <input type="file" id="csv-import-input" style="display: none;" accept=".csv" onchange="importHistoryFromCSV(event)">
+
+</div>

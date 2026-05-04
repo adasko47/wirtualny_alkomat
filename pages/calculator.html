@@ -1,52 +1,95 @@
-<div class="ion-padding fade-in" style="max-width: 500px; margin: 0 auto;">
+<div class="ion-padding fade-in" style="max-width: 600px; margin: 0 auto;">
 
-    <div style="text-align: center; margin-bottom: 30px; margin-top: 10px;">
-        <ion-icon name="calculator" style="font-size: 50px; color: #b966ff; margin-bottom: 10px;"></ion-icon>
-        <h2 style="font-weight: 800; margin: 0; background: -webkit-linear-gradient(45deg, #3880ff, #b966ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            Kalkulator Promili
+    <!-- Nagłówek z ikonką Info -->
+    <div style="position: relative; text-align: center; margin-bottom: 25px; margin-top: 10px;">
+        <ion-icon name="calculator-outline" style="font-size: 45px; color: #0bf4f3; margin-bottom: 10px;"></ion-icon>
+        <h2 style="font-weight: 800; margin: 0; background: -webkit-linear-gradient(45deg, #0bf4f3, #3880ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Kalkulator
         </h2>
-        <p style="color: gray; font-size: 0.95rem; margin-top: 5px;">Wprowadź dane, aby oszacować wynik</p>
+        <p style="color: gray; font-size: 0.95rem; margin-top: 5px;">Dodaj wszystko, co dziś wypiłeś</p>
+
+        <!-- Przycisk Info w rogu -->
+        <ion-icon name="information-circle" onclick="toggleFormulaInfo()" style="position: absolute; top: 0; right: 5px; font-size: 28px; color: var(--ion-color-medium); cursor: pointer;"></ion-icon>
     </div>
 
-    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 15px 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); margin-bottom: 25px;">
+    <!-- Ukryty panel z wyjaśnieniem wzoru (z nową klasą glass-panel) -->
+    <div id="formula-info" class="glass-panel" style="display: none; padding: 20px; margin-bottom: 20px; text-align: left; animation: fadeIn 0.3s ease;">
+        <h4 style="color: #0bf4f3; margin-top: 0; font-weight: bold; font-size: 1.1rem; display: flex; align-items: center;">
+            <ion-icon name="flask-outline" style="margin-right: 8px;"></ion-icon> Jak to liczymy?
+        </h4>
+        <p style="color: gray; font-size: 0.85rem; line-height: 1.6; margin-bottom: 15px;">
+            Aplikacja wykorzystuje zmodyfikowany <strong>wzór Widmarka</strong>. Zawartość alkoholu we krwi (BAC) obliczana jest z poniższego równania:
+        </p>
+        
+        <!-- Wzór naukowy -->
+        <div style="text-align: center; color: var(--ion-text-color); font-size: 1.3rem; margin-bottom: 15px; background: rgba(128,128,128,0.15); padding: 15px; border-radius: 10px; display: flex; justify-content: center; align-items: center;">
+            <span style="margin-right: 10px; font-weight: bold; letter-spacing: 1px;">BAC = </span>
+            <div style="display: flex; flex-direction: column; align-items: center; line-height: 1.2;">
+                <span style="border-bottom: 2px solid var(--ion-text-color); padding: 0 10px; width: 100%; text-align: center;">A</span>
+                <span style="padding: 2px 10px 0;">m &times; r</span>
+            </div>
+        </div>
+        
+        <ul style="color: gray; font-size: 0.85rem; padding-left: 20px; margin-bottom: 0; line-height: 1.6;">
+            <li><strong style="color: var(--ion-text-color);">A</strong> – masa czystego alkoholu (w gramach)</li>
+            <li><strong style="color: var(--ion-text-color);">m</strong> – masa ciała (w kilogramach)</li>
+            <li><strong style="color: var(--ion-text-color);">r</strong> – współczynnik dystrybucji (0.68 mężczyźni, 0.55 kobiety)</li>
+        </ul>
+    </div>
 
-        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
-            <ion-icon name="person-outline" slot="start" style="color: #3880ff;"></ion-icon>
-            <ion-select id="calc-gender" label="Płeć" label-placement="floating" style="width: 100%;">
+    <!-- 1. Dane użytkownika (z nową klasą glass-panel) -->
+    <div class="glass-panel" style="padding: 10px 20px; margin-bottom: 20px;">
+        <ion-item lines="none" style="--background: transparent;">
+            <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+            <ion-select id="calc-gender" label="Twoja płeć" label-placement="floating" interface="popover">
                 <ion-select-option value="m">Mężczyzna</ion-select-option>
                 <ion-select-option value="k">Kobieta</ion-select-option>
             </ion-select>
         </ion-item>
-
-        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
-            <ion-icon name="scale-outline" slot="start" style="color: #b966ff;"></ion-icon>
+        <ion-item lines="none" style="--background: transparent; margin-top: 5px;">
+            <ion-icon name="scale-outline" slot="start" color="secondary"></ion-icon>
             <ion-input id="calc-weight" type="number" label="Waga (kg)" label-placement="floating" placeholder="np. 80"></ion-input>
         </ion-item>
-
-        <ion-item style="--background: transparent; --border-color: rgba(255, 255, 255, 0.1);">
-            <ion-icon name="beer-outline" slot="start" style="color: #32d74b;"></ion-icon>
-            <ion-input id="calc-amount" type="number" label="Ilość (ml)" label-placement="floating" placeholder="np. 500"></ion-input>
-        </ion-item>
-
-        <ion-item lines="none" style="--background: transparent;">
-            <ion-icon name="water-outline" slot="start" style="color: #0bf4f3;"></ion-icon>
-            <ion-input id="calc-percent" type="number" label="Moc alkoholu (%)" label-placement="floating" placeholder="np. 5.0"></ion-input>
-        </ion-item>
-
     </div>
 
-    <ion-button expand="block" shape="round" size="large" onclick="calculatePromile()" style="--box-shadow: 0 8px 20px rgba(185, 102, 255, 0.4); font-weight: bold; letter-spacing: 0.5px; --background: linear-gradient(45deg, #3880ff, #b966ff); margin-bottom: 30px;">
-        <ion-icon name="flash-outline" slot="start"></ion-icon>
+    <!-- 2. Tutaj będą się pojawiać zwinięte trunki -->
+    <div id="drinks-list-container" style="margin-bottom: 15px;"></div>
+
+    <!-- 3. Formularz dodawania kolejnego trunku (z nową klasą glass-panel) -->
+    <div class="glass-panel" style="padding: 15px 20px; margin-bottom: 25px;">
+        <ion-row>
+            <ion-col size="6">
+                <ion-item lines="none" style="--background: transparent; border-right: 1px solid rgba(128,128,128,0.2);">
+                    <ion-input id="calc-amount" type="number" label="Poj. (ml)" label-placement="floating" placeholder="500"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-col size="6">
+                <ion-item lines="none" style="--background: transparent;">
+                    <ion-input id="calc-percent" type="number" label="Moc (%)" label-placement="floating" placeholder="5.0"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        
+        <ion-button expand="block" fill="clear" shape="round" onclick="addDrink()" style="margin-top: 10px; color: #0bf4f3; font-weight: bold; letter-spacing: 0.5px;">
+            <ion-icon name="add-circle-outline" slot="start" style="font-size: 22px;"></ion-icon>
+            Dodaj ten trunek
+        </ion-button>
+    </div>
+
+    <!-- 4. Główny przycisk obliczeń -->
+    <ion-button expand="block" shape="round" size="large" onclick="calculatePromile()" style="--box-shadow: 0 8px 20px rgba(11, 244, 243, 0.4); font-weight: bold; letter-spacing: 0.5px; --background: linear-gradient(45deg, #0bf4f3, #3880ff); margin-bottom: 30px;">
+        <ion-icon name="calculator-outline" slot="start"></ion-icon>
         Oblicz Wynik
     </ion-button>
 
-    <ion-card id="result-card" style="display: none; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; padding: 10px;">
+    <!-- 5. Karta z wynikiem -->
+    <ion-card id="result-card" class="glass-panel" style="display: none; text-align: center; padding: 15px 0;">
         <ion-card-header>
-            <ion-card-subtitle style="letter-spacing: 1px; text-transform: uppercase;">Szacowany wynik</ion-card-subtitle>
+            <ion-card-subtitle style="letter-spacing: 2px; text-transform: uppercase;">Szacowany wynik</ion-card-subtitle>
         </ion-card-header>
         <ion-card-content>
             <h1 id="result-value" style="font-size: 3.5rem; font-weight: 900; margin: 10px 0;">0.00 ‰</h1>
-            <div id="result-details" style="color: gray; font-size: 0.95rem; margin-top: 15px; line-height: 1.6;"></div>
+            <p id="result-details" style="color: gray; font-size: 0.9rem; margin-top: 15px; line-height: 1.5;"></p>
         </ion-card-content>
     </ion-card>
 

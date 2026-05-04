@@ -86,6 +86,8 @@ let gameTime = 10;
 let gameInterval;
 let targetElement;
 
+window.currentDrinks = []; // Pamięć dodanych trunków
+
 // --- OBSŁUGA TRYBU CIEMNEGO ---
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('themeToggle');
@@ -134,6 +136,13 @@ window.showPage = async function(pageName) {
         // Inicjalizacja zakładek po załadowaniu HTML
         if(pageName === 'home') setTimeout(drawHomeCanvas, 50);
         
+        if(pageName === 'calculator') {
+            setTimeout(() => {
+                window.currentDrinks = [];
+                if(typeof window.renderDrinksList === 'function') window.renderDrinksList();
+            }, 50);
+        }
+
         if(pageName === 'history') {
             let attempts = 0;
             let check = setInterval(() => {
@@ -203,41 +212,113 @@ window.showPage = async function(pageName) {
     if(menu) menu.close();
 };
 
-// --- 4. KALKULATOR (ANIMACJA + ZAPIS) ---
-window.calculatePromile = function() {
-    const gender = document.getElementById('calc-gender').value;
-    const weight = parseFloat(document.getElementById('calc-weight').value);
-    const amount = parseFloat(document.getElementById('calc-amount').value);
-    const percent = parseFloat(document.getElementById('calc-percent').value);
+window.addDrink = function() {
+    const amountInput = document.getElementById('calc-amount');
+    const percentInput = document.getElementById('calc-percent');
+    const amount = parseFloat(amountInput.value);
+    const percent = parseFloat(percentInput.value);
 
-    // 1. Sprawdzenie błędów
-    if (!gender || isNaN(weight) || isNaN(amount) || isNaN(percent) || weight <= 0) {
-        if(window.showToast) showToast("Proszę wypełnić wszystkie pola poprawnymi wartościami!");
+    if (isNaN(amount) || isNaN(percent) || amount <= 0 || percent <= 0) {
+        if(window.showToast) showToast("Podaj prawidłową pojemność i moc.");
         return;
     }
 
-    // 2. NOWE OBLICZENIA (Waga, Etanol i Promile)
-    const pureEthanolMl = amount * (percent / 100); 
-    const alcoholGrams = pureEthanolMl * 0.789; // Używamy tylko jednego alcoholGrams!
+    // Dodajemy trunek do naszej podręcznej pamięci
+    window.currentDrinks.push({ amount, percent });
     
+    // Czyścimy pola, żeby użytkownik mógł wpisać coś nowego
+    amountInput.value = '';
+    percentInput.value = '';
+    
+    renderDrinksList();
+};
+
+window.removeDrink = function(index) {
+    // Usuwamy trunek z listy po kliknięciu "X"
+    window.currentDrinks.splice(index, 1);
+    renderDrinksList();
+};
+
+window.renderDrinksList = function() {
+    const container = document.getElementById('drinks-list-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+    window.currentDrinks.forEach((drink, index) => {
+        container.innerHTML += `
+            <div class="glass-item" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; margin-bottom: 10px; animation: fadeIn 0.3s ease;">
+                <div style="display: flex; align-items: center;">
+                    <ion-icon name="beer-outline" style="color: #0bf4f3; font-size: 20px; margin-right: 10px;"></ion-icon>
+                    <strong style="color: var(--ion-text-color); font-size: 1.1rem; margin-right: 5px;">${drink.amount} ml</strong> 
+                    <span style="color: gray; font-size: 0.9rem;">(${drink.percent}%)</span>
+                </div>
+                <ion-icon name="close-circle" style="color: #ff453a; font-size: 24px; cursor: pointer;" onclick="removeDrink(${index})"></ion-icon>
+            </div>
+        `;
+    });
+};
+
+// --- 4. KALKULATOR (ANIMACJA + ZAPIS) ---
+
+window.toggleFormulaInfo = function() {
+    const infoPanel = document.getElementById('formula-info');
+    if (infoPanel.style.display === 'none' || infoPanel.style.display === '') {
+        infoPanel.style.display = 'block';
+    } else {
+        infoPanel.style.display = 'none';
+    }
+};
+
+window.calculatePromile = function() {
+    const gender = document.getElementById('calc-gender').value;
+    const weight = parseFloat(document.getElementById('calc-weight').value);
+    
+    // 1. Zbieramy to co jest aktualnie w polach (jeśli ktoś zapomniał kliknąć "Dodaj")
+    const amountInput = parseFloat(document.getElementById('calc-amount').value);
+    const percentInput = parseFloat(document.getElementById('calc-percent').value);
+    
+    if (!isNaN(amountInput) && !isNaN(percentInput) && amountInput > 0 && percentInput > 0) {
+        window.currentDrinks.push({ amount: amountInput, percent: percentInput });
+        document.getElementById('calc-amount').value = '';
+        document.getElementById('calc-percent').value = '';
+        renderDrinksList();
+    }
+
+    // 2. Walidacja błędów
+    if (!gender || isNaN(weight) || weight <= 0) {
+        if(window.showToast) showToast("Wybierz płeć i wpisz poprawną wagę!");
+        return;
+    }
+
+    if (window.currentDrinks.length === 0) {
+        if(window.showToast) showToast("Dodaj co najmniej jeden trunek!");
+        return;
+    }
+
+    // 3. Obliczenia masy etanolu dla wszystkich trunków z listy
+    let totalPureEthanolMl = 0;
+    window.currentDrinks.forEach(drink => {
+        totalPureEthanolMl += drink.amount * (drink.percent / 100);
+    });
+
+    const alcoholGrams = totalPureEthanolMl * 0.789; 
     const r = (gender === 'm') ? 0.68 : 0.55;
     let promile = alcoholGrams / (weight * r);
     let finalResult = promile.toFixed(2);
 
+    // 4. Aktualizacja interfejsu wyniku
     const resultCard = document.getElementById('result-card');
     const resultValue = document.getElementById('result-value');
     const resultDetails = document.getElementById('result-details');
     
-    // 3. Wstrzykiwanie tekstu edukacyjnego
     if (resultDetails) {
         resultDetails.innerHTML = `
-            W podanej porcji znajduje się:<br>
-            <ion-icon name="beaker-outline" style="vertical-align: middle;"></ion-icon> <strong>${pureEthanolMl.toFixed(1)} ml</strong> czystego etanolu<br>
+            Łącznie we wszystkich trunkach znajduje się:<br>
+            <ion-icon name="beaker-outline" style="vertical-align: middle;"></ion-icon> <strong>${totalPureEthanolMl.toFixed(1)} ml</strong> czystego etanolu<br>
             <ion-icon name="scale-outline" style="vertical-align: middle;"></ion-icon> co waży ok. <strong>${alcoholGrams.toFixed(1)} g</strong>
         `;
     }
 
-    // 4. Wyświetlanie karty
     resultCard.style.display = 'block';
     resultCard.classList.remove('fade-in');
     void resultCard.offsetWidth; 
@@ -267,54 +348,44 @@ window.calculatePromile = function() {
         window.promileAnimation = requestAnimationFrame(animate);
     }
 
-    // 6. Zapis do historii
-    // --- ZAKTUALIZOWANY ZAPIS Z GEOLOKALIZACJĄ ---
+    // 6. Zapis do historii (Rozbudowany o informację o wielu trunkach)
     const saveEntry = (locationData = null) => {
         const now = new Date();
+        
+        // Zgrabne formatowanie informacji do historii
+        let detailsText = window.currentDrinks.length === 1 
+            ? `${window.currentDrinks[0].amount}ml ${window.currentDrinks[0].percent}%` 
+            : `Różne trunki (${window.currentDrinks.length} szt.)`;
+
         const historyEntry = {
             date: now.toLocaleDateString() + ' ' + now.toLocaleTimeString(),
             result: finalResult,
-            details: `${amount}ml ${percent}%`,
+            details: detailsText,
             gameScore: null,
-            location: locationData // Tutaj trafia nazwa miasta lub współrzędne
+            location: locationData 
         };
         
         let history = JSON.parse(localStorage.getItem('alkoHistory')) || [];
         history.push(historyEntry);
         localStorage.setItem('alkoHistory', JSON.stringify(history));
-        console.log("Zapisano z lokalizacją:", locationData);
     };
 
-   // Próba pobrania lokalizacji i nazwy miasta
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-                
                 try {
-                    // Odpytujemy darmowe API OpenStreetMap
                     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                     const data = await response.json();
-                    
-                    // Wyciągamy miasto, miasteczko lub wieś
                     const city = data.address.city || data.address.town || data.address.village || data.address.county || "Nieznana lokalizacja";
-                    
-                    // Dodajemy flagę kraju dla bajeru (opcjonalnie)
                     const country = data.address.country === "Polska" ? "🇵🇱" : "";
-                    
-                    saveEntry(`${city} ${country}`); // Zapisujemy ładną nazwę!
-                    
+                    saveEntry(`${city} ${country}`);
                 } catch (error) {
-                    // W razie błędu (np. brak internetu), zapisujemy same współrzędne
-                    const loc = `Szer: ${lat.toFixed(2)}, Dł: ${lon.toFixed(2)}`;
-                    saveEntry(loc);
+                    saveEntry(`Szer: ${lat.toFixed(2)}, Dł: ${lon.toFixed(2)}`);
                 }
             },
-            (error) => {
-                // Błąd lokalizacji (brak zgody lub wyłączony GPS)
-                saveEntry(null);
-            },
+            (error) => saveEntry(null),
             { timeout: 5000 }
         );
     } else {
@@ -398,7 +469,7 @@ window.loadHistory = function() {
     if(statsLast && history.length > 0) statsLast.innerText = history[history.length - 1].result + '‰';
 
     if (history.length === 0) {
-        historyList.innerHTML = '<ion-item style="--background: transparent;"><ion-label color="medium">Brak wpisów.</ion-label></ion-item>';
+        historyList.innerHTML = '<ion-item class="glass-item" style="--background: transparent;"><ion-label color="medium" class="ion-text-center">Brak wpisów.</ion-label></ion-item>';
         if (typeof drawHistoryChart === "function") drawHistoryChart([]);
         return;
     }
@@ -416,14 +487,14 @@ window.loadHistory = function() {
             : '';
 
         historyList.innerHTML += `
-            <ion-item-sliding style="margin-bottom: 10px; border-radius: 15px; overflow: hidden;">
-                <ion-item style="--background: rgba(255,255,255,0.03); --border-color: transparent; border: 1px solid rgba(255,255,255,0.08); border-radius: 15px;">
+            <ion-item-sliding style="margin-bottom: 12px; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <ion-item class="glass-item" lines="none" style="--background: transparent; margin: 0; --padding-start: 15px;">
                     <ion-label class="ion-text-wrap">
-                        <h2 style="font-size: 1.2rem; color: white;"><strong>${entry.result} ‰</strong></h2>
+                        <h2 style="font-size: 1.3rem; color: var(--ion-text-color); margin-bottom: 5px;"><strong>${entry.result} ‰</strong></h2>
                         <p style="color: gray;">${entry.details}</p>
                         ${gameInfo}
                         ${locationInfo}
-                        <p style="font-size: 0.75em; color: gray; margin-top: 3px;">${entry.date}</p>
+                        <p style="font-size: 0.75em; color: gray; margin-top: 5px;">${entry.date}</p>
                     </ion-label>
                 </ion-item>
                 <ion-item-options side="end">

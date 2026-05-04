@@ -8,39 +8,45 @@
         </h2>
     </div>
 
-    <!-- 2. Twoje Zdjęcie z efektem "Glow" -->
-    <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 25px;">
-        <!-- UWAGA: Podmień "assets/moje_zdjecie.jpg" na prawdziwą ścieżkę do swojego pliku -->
+    <!-- 2. Twoje Zdjęcie (Powiększone do 190px) -->
+    <div style="position: relative; width: 190px; height: 190px; margin: 0 auto 25px;">
         <img src="assets/moje_zdjecie.jpg" onerror="this.src='https://ionicframework.com/docs/img/demos/avatar.svg'" alt="Zdjęcie Autora" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.2); box-shadow: 0 10px 30px rgba(56, 128, 255, 0.5); z-index: 2; position: relative;" />
     </div>
 
-    <!-- 3. Szklana Karta z Opisem -->
-    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); margin-bottom: 30px; text-align: left;">
+    <!-- 3. Szklana Karta z Opisem i Danymi Uczelni -->
+    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 25px 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); margin-bottom: 30px;">
         
-        <!-- Używamy var(--ion-text-color), żeby napis był automatycznie biały lub czarny zależnie od trybu -->
-        <h3 style="margin-top: 0; margin-bottom: 10px; font-weight: bold; font-size: 1.4rem; text-align: center; color: var(--ion-text-color);">
-            Witaj w Wirtualnym Alkomacie!
+        <!-- Imię i Nazwisko -->
+        <h3 style="margin-top: 0; margin-bottom: 10px; font-weight: 900; font-size: 1.6rem; color: var(--ion-text-color);">
+            Adam Lewandowski
         </h3>
         
-        <p style="color: gray; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px;">
-            Cześć! Stworzyłem tę aplikację z pasji do programowania oraz po to, aby ułatwić podejmowanie odpowiedzialnych decyzji. Pamiętaj jednak, że wszystkie wyniki mają charakter wyłącznie <strong style="color: #b966ff;">szacunkowy</strong>.
+        <!-- Plakietki z Uczelnią i Kierunkiem -->
+        <div style="margin-bottom: 20px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+            <ion-badge style="--background: rgba(56, 128, 255, 0.2); color: #3880ff; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
+                <ion-icon name="school-outline" style="vertical-align: middle; margin-right: 4px; font-size: 1rem;"></ion-icon>
+                Politechnika Poznańska
+            </ion-badge>
+            <ion-badge style="--background: rgba(185, 102, 255, 0.2); color: #b966ff; padding: 8px 12px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
+                <ion-icon name="flash-outline" style="vertical-align: middle; margin-right: 4px; font-size: 1rem;"></ion-icon>
+                Energetyka
+            </ion-badge>
+        </div>
+        
+        <p style="color: gray; font-size: 0.95rem; line-height: 1.6; margin-bottom: 15px; text-align: left;">
+            Cześć! Stworzyłem Wirtualny Alkomat w ramach projektu, łącząc wiedzę inżynierską z programowaniem, aby ułatwić podejmowanie odpowiedzialnych decyzji. Pamiętaj jednak, że wszystkie wyniki mają charakter wyłącznie <strong style="color: #b966ff;">szacunkowy</strong>.
         </p>
 
-        <p style="color: gray; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0;">
-            Dbam o to, by narzędzie było stale rozwijane. Znajdziesz tu nie tylko kalkulator, ale też bazę trunków, sprawdzian refleksu i historię spożycia. Baw się dobrze i pij odpowiedzialnie!
+        <p style="color: gray; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0; text-align: left;">
+            Dbam o to, by narzędzie było proste i przejrzyste. Znajdziesz tu kalkulator promili, bazę trunków, sprawdzian refleksu oraz historię spożycia. Baw się dobrze i pij odpowiedzialnie!
         </p>
     </div>
 
-    <!-- 4. Przyciski (Np. do kontaktu, GitHuba czy portfolio) -->
+    <!-- 4. Przycisk GitHub (z Twoim linkiem) -->
     <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-        <!-- Zmień linki onclick="window.open('...')" na swoje własne! -->
-        <ion-button shape="round" fill="outline" onclick="window.open('https://github.com', '_blank')" style="--border-color: rgba(255,255,255,0.2); color: #3880ff; font-weight: 600;">
+        <ion-button shape="round" fill="outline" onclick="window.open('https://github.com/adasko47/wirtualny_alkomat', '_blank')" style="--border-color: rgba(255,255,255,0.2); color: #3880ff; font-weight: 600;">
             <ion-icon name="logo-github" slot="start"></ion-icon>
-            GitHub
-        </ion-button>
-        <ion-button shape="round" fill="outline" onclick="window.location.href='mailto:twoj@email.com'" style="--border-color: rgba(255,255,255,0.2); color: #b966ff; font-weight: 600;">
-            <ion-icon name="mail-outline" slot="start"></ion-icon>
-            Kontakt
+            GitHub Projektu
         </ion-button>
     </div>
     
